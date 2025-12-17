@@ -1,49 +1,13 @@
 '''Audio event detection pipeline class'''
-from dataclasses import dataclass
 import os
-from pathlib import Path
 
+from audio_event_detection.classes import AudioPipelineConfig
 from audio_event_detection import (
     load,
 )
 from audio_event_detection.features import (
     Feature,
 )
-
-
-@dataclass
-class AudioPipelineConfig:
-    '''Audio event detection pipeline configuration parameters'''
-
-    # Audio parameters
-    sr: int = 22050 #sample rate
-    n_fft: int = 2048
-    hop_length: int = 512
-    n_mels: int = 64
-
-    # Filter parameters
-    fmin: float = 250.0 #[Hz]
-    fmax: float = 1100.0 #[Hz]
-
-    # Detection parameters
-
-    # Merging parameters
-
-    # Segmentation parameters
-
-    # OS parameters
-    output_folder_path: Path = None
-    verbose: bool = True
-
-    def __post_init__(self):
-        '''Parameters validation'''
-
-        if self.sr <= 0:
-            raise ValueError("Sample rate must be positive")
-        if self.fmin >= self.fmax:
-            raise ValueError("fmin must be less than fmax")
-        if self.output_folder_path:
-            os.makedirs(self.output_folder_path, exist_ok=True)
 
 
 class AudioPipeline:
@@ -62,9 +26,16 @@ class AudioPipeline:
 
 
     def __repr__(self):
+        def format_block(name, cfg, indent=2):
+            lines = [f"{' ' * indent}{name}:"]
+            for k, v in vars(cfg).items():
+                lines.append(f"{' ' * (indent + 2)}{k}: {v}")
+            return lines
+
         lines = ["AudioPipeline configuration:"]
-        for k, v in vars(self.cfg).items():
-            lines.append(f"  {k}: {v}")
+        for section, cfg in vars(self.cfg).items():
+            lines.extend(format_block(section, cfg))
+
         return "\n".join(lines) + "\n"
 
 
@@ -74,11 +45,11 @@ class AudioPipeline:
             raise FileNotFoundError(f'Audio file not found: {file_path}')
 
         try:
-            self.y = load.load_audio(file_path=file_path, sr=self.cfg.sr, mono=True)
+            self.y = load.load_audio(file_path=file_path, sr=self.cfg.audio.sr, mono=True)
         except Exception as e:
             raise RuntimeError(f'Failed to load audio file {file_path}: {e}') from e
 
-        if self.cfg.verbose:
+        if self.cfg.output.verbose:
             print(f'Audio file: {file_path} loaded successfully\n')
 
 

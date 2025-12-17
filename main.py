@@ -1,19 +1,31 @@
 '''Main function for the audio event detection script'''
 from audio_event_detection import aed
+from audio_event_detection.classes import (
+    AudioPipelineConfig,
+    AudioConfig,
+    FeatureConfig,
+    OutputConfig,
+)
 
 
-config = aed.AudioPipelineConfig(
+config = AudioPipelineConfig(
 
-    sr = 22050,
-    n_fft = 2048,
-    hop_length = 512,
-    n_mels = 64,
+    audio = AudioConfig(
+        sr = 22050,
+        n_fft = 2048,
+        hop_length = 512,
+    ),
 
-    fmin = 250,
-    fmax = 1100,
+    features = FeatureConfig(
+        n_mels = 64,
+        fmin = 250,
+        fmax = 1100,
+    ),
 
-    output_folder_path = "output/",
-    verbose = True,
+    output = OutputConfig(
+        output_folder_path = "output/",
+        verbose = True,
+    ),
 
 )
 

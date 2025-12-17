@@ -28,15 +28,15 @@ class Feature:
         try:
             self.pipeline.y = flt.apply_filters(
                 data=self.pipeline.y,
-                sr=self.pipeline.cfg.sr,
-                highpass_cutoff=self.pipeline.cfg.fmin,
-                lowpass_cutoff=self.pipeline.cfg.fmax
+                sr=self.pipeline.cfg.audio.sr,
+                highpass_cutoff=self.pipeline.cfg.features.fmin,
+                lowpass_cutoff=self.pipeline.cfg.features.fmax
             )
             self._filtered = True
         except Exception as e:
             raise RuntimeError(f'Failed to filter audio file: {e}') from e
 
-        if self.pipeline.cfg.verbose:
+        if self.pipeline.cfg.output.verbose:
             print('Audio file filtered successfully\n')
 
 
@@ -52,5 +52,11 @@ class Feature:
         except Exception as e:
             raise RuntimeError(f'Failed to compute the RMS: {e}') from e
 
-        if self.pipeline.cfg.verbose:
+        if self.pipeline.cfg.output.verbose:
             print('RMS computed successfully\n')
+
+
+    def plot(self):
+        '''Function to plot the RMS of the audio file'''
+        if self.rms is None:
+            Feature.compute_rms(self)
