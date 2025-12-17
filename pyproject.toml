@@ -1,0 +1,21 @@
+[project]
+name = "audio_event_detection"
+version = "0.1.0"
+description = "Test program to build a functional audio event detection algorithm"
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = [
+]
+
+# Comando CLI per eseguire main.py
+[project.scripts]
+clean-dataset = "main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest]
+pythonpath = "src"
+testpaths = ["test"]
