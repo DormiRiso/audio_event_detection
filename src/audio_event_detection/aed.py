@@ -5,8 +5,9 @@ from pathlib import Path
 
 from audio_event_detection import (
     load,
-    filter as flt,
-    rms,
+)
+from audio_event_detection.features import (
+    Feature,
 )
 
 
@@ -53,13 +54,10 @@ class AudioPipeline:
         self.cfg = config
         self.y = None
 
+        # Initialize feature class
+        self.features = Feature(self)
+
         # Cache
-        self._filtered = False
-        self._mel = None
-        self._stft = None
-        self._rms = None
-        self._maxp = None
-        self._par = None
         self._events = None
 
 
@@ -84,44 +82,8 @@ class AudioPipeline:
             print(f'Audio file: {file_path} loaded successfully\n')
 
 
-    def _filter_audio_file(self):
-        '''Function to band-filter a audio file'''
-        if self.y is None:
-            raise RuntimeError('Error occured while filtering audio file: no audio file loaded')
-
-        try:
-            self.y = flt.apply_filters(
-                data=self.y,
-                sr=self.cfg.sr,
-                highpass_cutoff=self.cfg.fmin,
-                lowpass_cutoff=self.cfg.fmax
-            )
-            self._filtered = True
-        except Exception as e:
-            raise RuntimeError(f'Failed to filter audio file: {e}') from e
-
-        if self.cfg.verbose:
-            print('Audio file filtered successfully\n')
-
-
-    def _compute_rms(self):
-        '''Function to compute the RMS of the audio file'''
-        if self._rms is not None:
-            pass
-        if not self._filtered:
-            AudioPipeline._filter_audio_file(self)
-
-        try:
-            self._rms = rms.compute_rms(self.y)
-        except Exception as e:
-            raise RuntimeError(f'Failed to compute the RMS: {e}') from e
-
-        if self.cfg.verbose:
-            print('RMS computed successfully\n')
-
-
     def rms_detection(self):
         '''Run audio event detection algorithm based on RMS value'''
-        if self._rms is None:
-            AudioPipeline._compute_rms(self)
+        if self.features.rms is None:
+            self.features.compute_rms()
         print("pipeline rms")
