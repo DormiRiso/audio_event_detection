@@ -22,4 +22,6 @@ pipeline = aed.AudioPipeline(config=config)
 
 print(pipeline)
 
+# Pipeline start
 pipeline.load_audio_file("data/277566242.wav")
+pipeline.rms_detection()
