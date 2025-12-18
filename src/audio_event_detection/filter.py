@@ -1,5 +1,6 @@
 '''Module for applying high-pass and low-pass filters to audio data.'''
 from scipy.signal import butter, filtfilt
+from audio_event_detection.classes import AudioPipelineConfig
 
 
 def highpass_filter(data, sr, cutoff=250):
@@ -30,18 +31,23 @@ def lowpass_filter(data, sr, cutoff=1100):
     return filtfilt(b, a, data)
 
 
-def apply_filters(data, sr, highpass_cutoff=250, lowpass_cutoff=1100):
+def apply_filters(data, config: AudioPipelineConfig):
     '''Function to apply both high-pass and low-pass filters to the audio data.
     Args:
         data (np.ndarray): The audio data to be filtered.
-        sr (int): The sample rate of the audio data.
-        highpass_cutoff (float): The cutoff frequency for the high-pass filter in Hz.
-        lowpass_cutoff (float): The cutoff frequency for the low-pass filter in Hz.
     Returns:
         np.ndarray: The filtered audio data.
     '''
 
-    filtered_data = highpass_filter(data, sr, cutoff=highpass_cutoff)
-    filtered_data = lowpass_filter(filtered_data, sr, cutoff=lowpass_cutoff)
+    filtered_data = highpass_filter(
+        data=data,
+        sr=config.audio.sr,
+        cutoff=config.features.fmin
+    )
+    filtered_data = lowpass_filter(
+        data=filtered_data,
+        sr=config.audio.sr,
+        cutoff=config.features.fmax
+    )
 
     return filtered_data

@@ -18,6 +18,8 @@ class FeatureConfig:
     n_mels: int = 64
     fmin: float = 250.0
     fmax: float = 1100.0
+    stft_min: float = 250.0
+    stft_max: float = 1100.0
 
     def __post_init__(self):
         if self.fmin >= self.fmax:

@@ -20,6 +20,8 @@ config = AudioPipelineConfig(
         n_mels = 64,
         fmin = 250,
         fmax = 1100,
+        stft_min = 250,
+        stft_max = 1100,
     ),
 
     output = OutputConfig(

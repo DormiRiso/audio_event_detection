@@ -6,6 +6,10 @@ readme = "README.md"
 requires-python = ">=3.8"
 
 dependencies = [
+    "librosa",
+    "numpy",
+    "matplotlib",
+    "scipy",
 ]
 
 # Comando CLI per eseguire main.py
