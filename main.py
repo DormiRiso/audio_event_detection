@@ -4,6 +4,7 @@ from audio_event_detection.classes import (
     AudioPipelineConfig,
     AudioConfig,
     FeatureConfig,
+    DetectionConfig,
     OutputConfig,
 )
 
@@ -24,6 +25,11 @@ config = AudioPipelineConfig(
         stft_max = 1100,
     ),
 
+    detection = DetectionConfig(
+        threshold_coefficient = 1.0,
+        curve_smoothing_window = 10.0,
+    ),
+
     output = OutputConfig(
         output_folder_path = "output/",
         verbose = True,
@@ -38,4 +44,4 @@ print(pipeline)
 
 # Pipeline start
 pipeline.load_audio_file("data/277566242.wav")
-pipeline.rms_detection()
+pipeline.detect.detect_by_rms()

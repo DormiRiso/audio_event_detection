@@ -8,6 +8,9 @@ from audio_event_detection import (
 from audio_event_detection.features.features import (
     Feature,
 )
+from audio_event_detection.detection.detect import (
+    Detect,
+)
 
 
 class AudioPipeline:
@@ -20,6 +23,7 @@ class AudioPipeline:
 
         # Initialize feature class
         self.features = Feature(self)
+        self.detect = Detect(self)
 
         # Cache
         self._events = None
@@ -51,13 +55,3 @@ class AudioPipeline:
 
         if self.cfg.output.verbose:
             print(f'Audio file: {file_path} loaded successfully\n')
-
-
-    def rms_detection(self):
-        '''Run audio event detection algorithm based on RMS value'''
-        if self.features.rms is None:
-            self.features.compute_rms()
-            print("pipeline rms \n")
-        if self.features.par is None:
-            self.features.compute_par()
-            print("pipeline PAR \n")

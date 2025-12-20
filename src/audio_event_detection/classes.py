@@ -29,6 +29,8 @@ class FeatureConfig:
 @dataclass
 class DetectionConfig:
     '''Event detection parameters'''
+    threshold_coefficient: float = 1.0
+    curve_smoothing_window: float = 10.0
 
 
 @dataclass
