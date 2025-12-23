@@ -67,3 +67,20 @@ class AudioPipelineConfig:
     merging: MergingConfig = field(default_factory=MergingConfig)
     segmentation: SegmentationConfig = field(default_factory=SegmentationConfig)
     output: OutputConfig = field(default_factory=OutputConfig)
+
+
+@dataclass
+class Peaks:
+    '''Dataclass to store detected peaks'''
+    peak_times: list
+    threshold: float
+    detection_curve_smoothed: list
+
+
+@dataclass
+class Events:
+    '''Dataclass to store detected events'''
+    event_timestamps: list
+    detection_curve: list
+    threshold: float
+    detection_curve_smoothed: list

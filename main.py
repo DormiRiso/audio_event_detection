@@ -28,7 +28,7 @@ config = AudioPipelineConfig(
 
     detection = DetectionConfig(
         threshold_coefficient = 0.75,
-        curve_smoothing_window = 1.0,
+        curve_smoothing_window = 0.1,
     ),
 
     merging = MergingConfig(

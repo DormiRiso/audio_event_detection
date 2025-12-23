@@ -65,6 +65,13 @@ def plot_events(pipeline, config: AudioPipelineConfig, plot_save_path=None):
         label="Detection curve",
         color='blue'
     )
+    ax2.plot(
+        times_curve,
+        pipeline.detect.events.detection_curve_smoothed,
+        label="Detection curve smoothed",
+        color='green',
+        alpha=0.8
+    )
     ax2.axhline(
         pipeline.detect.events.threshold,
         color="green",

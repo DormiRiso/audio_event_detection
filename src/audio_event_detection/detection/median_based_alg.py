@@ -4,6 +4,7 @@ import librosa
 from scipy.ndimage import uniform_filter1d
 from scipy.signal import find_peaks
 from audio_event_detection.classes import AudioPipelineConfig
+from audio_event_detection.classes import Peaks
 
 
 def compute_peaks(curve, config: AudioPipelineConfig):
@@ -34,4 +35,8 @@ def compute_peaks(curve, config: AudioPipelineConfig):
         hop_length=config.audio.hop_length,
     )
 
-    return (times, threshold)
+    return Peaks(
+        peak_times=times,
+        threshold=threshold,
+        detection_curve_smoothed=curve_smooth
+    )
