@@ -2,7 +2,7 @@
 import os
 
 from audio_event_detection.classes import AudioPipelineConfig
-from audio_event_detection import (
+from audio_event_detection.audio import (
     load,
 )
 from audio_event_detection.features.features import (
@@ -10,6 +10,9 @@ from audio_event_detection.features.features import (
 )
 from audio_event_detection.detection.detect import (
     Detect,
+)
+from audio_event_detection.plotting.plot import (
+    Plot,
 )
 
 
@@ -24,9 +27,7 @@ class AudioPipeline:
         # Initialize feature class
         self.features = Feature(self)
         self.detect = Detect(self)
-
-        # Cache
-        self._events = None
+        self.plot = Plot(self)
 
 
     def __repr__(self):

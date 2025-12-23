@@ -1,7 +1,17 @@
 '''Audio event detection class'''
+from dataclasses import dataclass
 from audio_event_detection.detection import (
     median_based_alg,
 )
+from audio_event_detection.merging.merge import merge_peaks_into_events
+
+
+@dataclass
+class Events:
+    '''Dataclass to store detected events'''
+    event_timestamps: list
+    detection_curve: list
+    threshold: float
 
 
 class Detect:
@@ -9,6 +19,7 @@ class Detect:
 
     def __init__(self, pipeline):
         self.pipeline = pipeline
+        self.events: Events = None
 
         # Cache
         self.rms_detection = None
@@ -30,6 +41,14 @@ class Detect:
             self.rms_detection = median_based_alg.compute_peaks(
                 curve=self.pipeline.features.rms,
                 config=self.pipeline.cfg
+            )
+            self.events = Events(
+                event_timestamps=merge_peaks_into_events(
+                    peak_times=self.rms_detection[0],
+                    config=self.pipeline.cfg
+                ),
+                detection_curve=self.pipeline.features.rms,
+                threshold=self.rms_detection[1]
             )
         except Exception as e:
             raise RuntimeError(f'Failed to detect events by RMS: {e}') from e

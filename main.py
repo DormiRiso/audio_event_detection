@@ -5,6 +5,7 @@ from audio_event_detection.classes import (
     AudioConfig,
     FeatureConfig,
     DetectionConfig,
+    MergingConfig,
     OutputConfig,
 )
 
@@ -26,8 +27,14 @@ config = AudioPipelineConfig(
     ),
 
     detection = DetectionConfig(
-        threshold_coefficient = 1.0,
-        curve_smoothing_window = 10.0,
+        threshold_coefficient = 0.75,
+        curve_smoothing_window = 1.0,
+    ),
+
+    merging = MergingConfig(
+        merging_time_window = 5.0,
+        minimum_event_duration = 1.0,
+        head_tail_extension = 0.5,
     ),
 
     output = OutputConfig(
@@ -42,6 +49,12 @@ pipeline = aed.AudioPipeline(config=config)
 
 print(pipeline)
 
+# Folder system setup
+input_file = "data/277566242.wav"
+output_folder = "output/" + input_file.split('/')[-1].split('.')[0] + '/'
+plot_save_path = output_folder + "plot.jpeg"
+
 # Pipeline start
 pipeline.load_audio_file("data/277566242.wav")
 pipeline.detect.detect_by_rms()
+pipeline.plot.plot_events(plot_save_path=plot_save_path)

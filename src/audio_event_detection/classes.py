@@ -36,6 +36,9 @@ class DetectionConfig:
 @dataclass
 class MergingConfig:
     '''Event merging parameters'''
+    merging_time_window: float = 1.0
+    minimum_event_duration: float = 0.5
+    head_tail_extension: float = 1.0
 
 
 @dataclass

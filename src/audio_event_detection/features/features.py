@@ -1,5 +1,5 @@
 '''Audio features extraction class'''
-from audio_event_detection import (
+from audio_event_detection.audio import (
     filter as flt,
 )
 from audio_event_detection.features import (
